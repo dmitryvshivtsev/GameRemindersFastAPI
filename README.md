@@ -1,2 +1,3 @@
-# GameReminders-FastAPI
-Game reminders + FastAPI
+# GameReminders + FastAPI
+
+Данный проект имеет функционал проекта GameRemindersBot, но отображает информацию о предстоящих матчах на сайте с использованием FastAPI.
