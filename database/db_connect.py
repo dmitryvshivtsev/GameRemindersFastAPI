@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-engine = create_engine('DB_CONNECT')
+engine = create_engine(os.getenv('DB_CONNECT'))
 connection = engine.connect()
 
 
@@ -28,3 +28,8 @@ def get_team(league: str):
     result = []
     [result.append(*res) for res in query]
     return result
+
+
+def get_tag(team: str):
+    query = connection.execute(db.text(f"SELECT team_tag FROM teams WHERE team = '{team}'")).fetchall()
+    return query[0][0]
