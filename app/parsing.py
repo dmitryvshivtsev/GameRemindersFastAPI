@@ -10,7 +10,7 @@ def get_match(club: str, team_tag: str) -> dict:
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'lxml')
     endpoint = {
-        "is_finist": "False",
+        "is_finish": "False",
         "actual_score": None,
         "club": club,
         "opponent": None,
