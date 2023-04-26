@@ -3,25 +3,56 @@
 <head>
     <title>Home</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
+<div id="app">
     <center>
     <h2>Добро пожаловать!</h2>
     <form action="date" method="post">
         <p>
             Вид спорта:<br>
-            <input name="kind_of_sport" />
+            <input type="text" name="kind_of_sport" v-model="kind_of_sport" />
         </p>
         <p>
             Лига:<br>
-            <input name="league" />
+            <input type="text" name="league" v-model="league" />
         </p>
         <p>
             Клуб:<br>
-            <input name="club" />
+            <input type="text" name="club" v-model="club" />
         </p>
-        <input type="submit" value="Send" />
+        <button @click="sendInfo">Узнать дату</button>
     </form>
     </center>
+</div>
+    <script>
+      new Vue({
+            el: '#app',
+            data: {
+                kind_of_sport: '',
+                league: '',
+                club: ''
+            },
+            methods: {
+                sendInfo() {
+                    axios.post("/date", {
+                        kind_of_sport: this.kind_of_sport,
+                        league: this.league,
+                        club: this.club
+                    }, {
+                        headers: {
+                            'Content-type': 'application/json',
+                        }
+                    }).then((response) => {
+                        console.log(this.kind_of_sport, this.league, this.club);
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
