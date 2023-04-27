@@ -4,19 +4,11 @@ import lxml
 from datetime import datetime, date
 
 
-def get_match(club: str, team_tag: str) -> dict:
+def get_match(club: str, team_tag: str, endpoint: dict) -> dict:
     url = f'https://www.sports.ru/{team_tag}/calendar'
     response = requests.get(url=url)
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'lxml')
-    endpoint = {
-        "is_finish": "False",
-        "actual_score": None,
-        "club": club,
-        "opponent": None,
-        "next_game_date": None,
-        "next_game_time": None
-    }
 
     now = datetime.now()
     dates = parse_date(soup)
@@ -26,7 +18,7 @@ def get_match(club: str, team_tag: str) -> dict:
     last_result = last_game_result(soup=soup, is_finish=is_finish)
 
     for i, date_time in enumerate(dates):
-        # Формат на сайте лежит в виде "Дата | Время" или "Дата"
+        # Дата и время на сайте лежит в виде "Дата | Время" или "Дата"
         date_time = date_time.split('|')
         if len(date_time) > 1 or not date_time[0].isalpha():
             elems = date_time[0].split('.')
@@ -38,19 +30,21 @@ def get_match(club: str, team_tag: str) -> dict:
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
                     if date_time[1] <= now_time and parsed_date.day == now.day:
                         if not is_finish:
-                            endpoint.update([('is_finish', "False"), ('actual_score', last_result)])
+                            endpoint.update([('is_finish', 'False'),
+                                             ('actual_score', last_result)])
                             return endpoint
-                        if is_finish:
-                            endpoint.update([('is_finish', 'True'), ('actual_score', last_result)])
+                        else:
+                            endpoint.update([('is_finish', 'True'),
+                                             ('actual_score', last_result)])
                             return endpoint
-                    elif len(date_time) > 1:
-                        endpoint.update([('is_finish', 'True'), ('actual_score', last_result), ('opponent', opps[i]),
-                                         ('next_game_date', parsed_date.strftime('%d.%m.%Y')),
-                                         ('next_game_time', date_time[1])])
-                        return endpoint
                     else:
-                        endpoint.update([('is_finish', 'True'), ('actual_score', last_result), ('opponent', opps[i]),
+                        endpoint.update([('is_finish', 'True'),
+                                         ('actual_score', last_result),
+                                         ('is_next_game', 'True'),
+                                         ('opponent', opps[i]),
                                          ('next_game_date', parsed_date.strftime('%d.%m.%Y'))])
+                        if len(date_time) > 1:
+                            endpoint.update([('next_game_time', date_time[1])])
                         return endpoint
 
 
