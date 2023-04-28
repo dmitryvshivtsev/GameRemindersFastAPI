@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose team</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="../static/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <div class="header-line">
+            <h4>Game reminders by Vshivtsev Dmitry</h4>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="date">Выбрать команду</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Главная страница</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<main>
+    <br><br>
+    <div class="card text-dark bg-light mb-3">
+    <div class="card-header"><b>Добро пожаловать!</b></div>
+        <div class="card-body">
+            <form action="date" method="post">
+                  <div class="form-group">
+                      <label>Вид спорта</label>
+                      <small class="form-text text-muted">Все данные нужно вводить на русском языке</small>
+                      <input type="text" name="kind_of_sport" class="form-control" placeholder="Футбол">
+                  </div>
+                  <div class="form-group">
+                      <label>Лига</label>
+                      <input type="text" name="league" class="form-control" placeholder="АПЛ">
+                  </div>
+                  <div class="form-group">
+                      <label>Клуб</label>
+                      <input type="text" name="club" class="form-control" placeholder="Арсенал">
+                  </div>
+                  <input type="submit" class="btn btn-primary" value="Узнать дату" />
+              </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

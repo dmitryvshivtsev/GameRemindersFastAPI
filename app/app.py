@@ -1,6 +1,6 @@
 from typing import Annotated
-from fastapi import FastAPI, Form, Request, Depends
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -15,13 +15,13 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")
 
 
-@app.get("/")
-def root() -> dict:
-    return {"home": "page"}
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 
 @app.post("/date", response_class=HTMLResponse)
-def users(request: Request,
+def get_game_date(request: Request,
           kind_of_sport: Annotated[str, Form()],
           league:  Annotated[str, Form()],
           club: Annotated[str, Form()]):
@@ -39,14 +39,14 @@ def users(request: Request,
     club_ = db.get_team(league)
     if kind_of_sport in type_ and league in league_ and club in club_:
         team_tag = db.get_tag(club)
-        return templates.TemplateResponse("date.html", {"request": request,
-                                                        "match_info": prs.get_match(club=club,
-                                                                                    team_tag=team_tag,
-                                                                                    endpoint=endpoint)})
+        return templates.TemplateResponse("game_date.html", {"request": request,
+                                                             "match_info": prs.get_match(club=club,
+                                                                                         team_tag=team_tag,
+                                                                                         endpoint=endpoint)})
     else:
         return 'Error'
 
 
-@app.get("/date")
-def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+@app.get("/date", response_class=HTMLResponse)
+def choose_team(request: Request):
+    return templates.TemplateResponse("choose_team.html", {"request": request})
